@@ -168,7 +168,7 @@ def create_squad_dataset(file_path, seq_length, batch_size, is_training):
   return dataset
 
 
-def _get_input_iterator(input_fn, strategy):
+def get_input_iterator(input_fn, strategy):
   """Returns distributed dataset iterator."""
 
   # When training with TPU pods, datasets needs to be cloned across
@@ -400,7 +400,7 @@ def _single_token_mask(inputs, tgt_len, num_predict):
   non_func_indices = tf.boolean_mask(all_indices, non_func_mask)
 
   masked_pos = tf.random.shuffle(non_func_indices)
-  masked_pos = tf.contrib.framework.sort(masked_pos[:num_predict])
+  masked_pos = tf.sort(masked_pos[:num_predict])
   target_mask = tf.sparse_to_dense(
       sparse_indices=masked_pos,
       output_shape=[tgt_len],
